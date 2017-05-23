@@ -1,0 +1,187 @@
+<html>
+	<head>
+		<style>
+		canvas {
+			display: none;
+		}
+		svg {
+			border-width: 1px;
+			border-style: solid;
+		}
+		.hexmap {
+			position: fixed;
+			top: 8px;
+			left: 8px;
+		}
+		.hexagons {
+			#opacity: 0.4;
+		}
+		</style>
+	</head>
+	<body>
+		<section id="vis"></section>
+
+		<!-- dependencies -->
+		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+		<script src="https://d3js.org/topojson.v1.min.js"></script>
+		<script src="https://d3js.org/d3.geo.projection.v0.min.js"></script>
+		<script src="./countries.js"></script>
+		<!-- d3 code -->
+		<script>
+			var hexmap = function hexmap() {
+
+			//________________________________________________
+			// GET/SET defaults
+			//________________________________________________
+
+			// private variables
+			var svg = undefined;
+			var dispatch = d3.dispatch('customHover');
+
+			// getter setter defaults
+			var opts = {
+				width: 1920,
+				height: 1000,
+				margin: { top: 20, right: 10, bottom: 20, left: 10 },
+				radius: 7.5,
+				stroke: 1,
+				scale: 360,
+				rotate: [-10, 0, 0]
+			};
+
+			var hexbin = d3.hexbin().size([opts.width, opts.height]).radius(opts.radius);
+
+			//________________________________________________
+			// RENDER
+			//________________________________________________
+
+			function exports(_selection) {
+
+				var canvas = _selection.append('canvas').attr('width', opts.width).attr('height', opts.height).attr('id', 'mapCanvas');
+
+				var context = canvas.node().getContext('2d');
+				var points = [];
+				var cityPoints = [];
+				var hexagons = [];
+				var cityHexagons = [];
+
+				var projection = d3.geo.kavrayskiy7().scale(opts.scale).rotate(opts.rotate).translate([opts.width / 2, opts.height / 2]).center([0, 0]);
+
+				context.fillStyle = 'red';
+				context.strokeStyle = 'none';
+
+				var path = d3.geo.path().projection(projection).context(context);
+
+				var dataUrl = './world-110m.json';
+
+				d3.json(dataUrl, function (error, world) {
+					if (error) throw error;
+					path(topojson.feature(world, world.objects.land));
+					context.fill();
+
+					// use the canvas as the image
+					var image = document.getElementById('mapCanvas');;
+
+					context.drawImage(image, 0, 0, opts.width, opts.height);
+					image = context.getImageData(0, 0, opts.width, opts.height);
+
+					// rescale the colors
+					for (var c, i = 0, n = opts.width * opts.height * 4, d = image.data; i < n; i += 4) {
+						points.push([i / 4 % opts.width, Math.floor(i / 4 / opts.width), d[i]]);
+					}
+
+					var coord, j;
+					for (i = 0; i < countries.length; i++) {
+						for (j = 0; j < countries[i].cities.length; j++) {
+							// projection needs input as [longitude (ie x), latitude (ie y)]
+							cityPoints.push(projection([countries[i].cities[j].location[1],
+																					countries[i].cities[j].location[0]]));
+						}
+					}
+
+					cityHexagons = hexbin(cityPoints);
+
+					hexagons = hexbin(points);
+					hexagons.forEach(function (d) {
+						d.mean = d3.mean(d, function (p) {
+							return p[2];
+						});
+
+						d.fill = (d.mean >= 64) ? 'pink' : 'white';
+
+						for (i = 0; i < cityHexagons.length; i++) {
+							if (cityHexagons[i].x === d.x &&
+									cityHexagons[i].y === d.y) {
+								d.fill = 'blue';
+							}
+						}
+					});
+
+					var svg = _selection.append('svg')
+															.attr('width', opts.width / 2)
+															.attr('height', opts.height / 2)
+															.attr('class', 'hexmap');
+
+					var innerRadius = opts.radius - opts.stroke;
+
+					var hexagon = svg.append('g')
+													 .attr('class', 'hexagons')
+													 .selectAll('path')
+													 .data(hexagons)
+													 .enter()
+													 .append('path')
+													 .attr('d', hexbin.hexagon(innerRadius / 2))
+													 .attr('transform', function (d) {
+														 var x = d.x / 2 - 3.75;
+														 var y = d.y / 2 + 28.75; 
+														 return 'translate(' + x + ',' + y + ')'; 
+														})
+													 .style('fill', function (d) { return (d.y >= 900) ? 'none' : d.fill; });
+				});
+			} // exports
+
+			function getImage(path, callback) {
+				var image = new Image();
+				image.onload = function () {
+					callback(image);
+				};
+				image.src = path;
+			}
+
+			//________________________________________________
+			// GET/SET 
+			//________________________________________________
+
+			function getSet(option, component) {
+				return function (_) {
+					if (!arguments.length) {
+						return this[option];
+					}
+
+					this[option] = _;
+
+					return component;
+				};
+			}
+
+			// api for chart, all items in `opts` object made into get-set
+			for (var key in opts) {
+				exports[key] = getSet(key, exports).bind(opts);
+			}
+
+			d3.rebind(exports, dispatch, 'on');
+			return exports;
+		};
+		</script>
+
+		<script>
+		// call chart 
+		let chart = hexmap();
+
+		// apply chart to DOM
+		d3.select('#vis')
+			.call(chart);
+		</script>
+	</body>
+</html>
