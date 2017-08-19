@@ -91,16 +91,20 @@
 						points.push([i / 4 % opts.width, Math.floor(i / 4 / opts.width), d[i]]);
 					}
 
-					var coord, j;
-					for (i = 0; i < countries.length; i++) {
-						for (j = 0; j < countries[i].cities.length; j++) {
-							// projection needs input as [longitude (ie x), latitude (ie y)]
-							cityPoints.push(projection([countries[i].cities[j].location[1],
-																					countries[i].cities[j].location[0]]));
-						}
-					}
+					var coord, j, k, countries;
 
-					cityHexagons = hexbin(cityPoints);
+					for (i = 0; i < colors.length; i++) {
+						countries = colors[i].countries;
+						cityPoints = [];
+						for (j = 0; j < countries.length; j++) {
+							for (k = 0; k < countries[j].cities.length; k++) {
+								// projection needs input as [longitude (ie x), latitude (ie y)]
+								cityPoints.push(projection([countries[j].cities[k].location[1],
+																						countries[j].cities[k].location[0]]));
+							}
+						}
+						cityHexagons[i] = hexbin(cityPoints);
+					}
 
 					hexagons = hexbin(points);
 					hexagons.forEach(function (d) {
@@ -110,10 +114,12 @@
 
 						d.fill = (d.mean >= 64) ? 'pink' : 'white';
 
-						for (i = 0; i < cityHexagons.length; i++) {
-							if (cityHexagons[i].x === d.x &&
-									cityHexagons[i].y === d.y) {
-								d.fill = 'blue';
+						for (i = 0; i < colors.length; i++) {
+							for (j = 0; j < cityHexagons[i].length; j++) {
+								if (cityHexagons[i][j].x === d.x &&
+										cityHexagons[i][j].y === d.y) {
+									d.fill = colors[i].color;
+								}
 							}
 						}
 					});

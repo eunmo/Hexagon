@@ -1,6 +1,8 @@
 // location := [latitude, longitude]
-var countries = [
-	// Asia
+var colors = [
+{ color: 'blue',
+	countries: [
+	// Asia - 7
 	{ name: 'Korea',
 		cities: [
 			{ location: [37.57, 127.98], name: 'Seoul' },
@@ -35,7 +37,7 @@ var countries = [
 			{ location: [11.98, 121.92], name: 'Boracay' }
 		] },
 
-	// Oceania
+	// Oceania -2
 	{ name: 'Australia',
 		cities: [
 			{ location: [-33.87, 151.21], name: 'Sydney' },
@@ -47,7 +49,7 @@ var countries = [
 			{ location: [-36.85, 174.76], name: 'Boracay' }
 		] },
 
-	// Europe
+	// Europe - 14
 	{ name: 'Austria',
 		cities: [
 			{ location: [48.21, 16.37], name: 'Vienna' },
@@ -117,7 +119,7 @@ var countries = [
 			{ location: [51.51, 0.13], name: 'London' }
 		] },
 	
-	// Africa
+	// Africa - 5 
 	{ name: 'Botswana',
 		cities: [
 			{ location: [-18.67, 24.50], name: 'Livingstone' }
@@ -141,7 +143,7 @@ var countries = [
 			{ location: [-17.92, 25.86], name: 'Victoria Falls' }
 		] },
 	
-	// North America
+	// North America - 2
 	{ name: 'Canada',
 		cities: [
 			{ location: [49.28, -123.12], name: 'Vancouver' },
@@ -160,7 +162,7 @@ var countries = [
 			{ location: [40.71, -74.01], name: 'New York' }
 		] },
 	
-	// South America
+	// South America - 5
 	{ name: 'Argentina',
 		cities: [
 			{ location: [-34.60, -58.38], name: 'Buenos Aires' },
@@ -194,5 +196,39 @@ var countries = [
 	{ name: 'Dummy',
 		cities: [
 		] }
+	]
+},
+{ color: 'red',
+	countries: [
+	// Asia
+	{ name: 'China',
+		cities: [
+			{ location: [22.40, 114.11], name: 'Hong Kong' }
+		] },
+	{ name: 'Singapore',
+		cities: [
+			{ location: [1.35, 103.82], name: 'Singapore' }
+		] },
+	{ name: 'Taiwan',
+		cities: [
+			{ location: [25.03, 121.57], name: 'Taipei' }
+		] },
+
+	// Europe
+	{ name: 'Belgium',
+		cities: [
+			{ location: [50.85, 4.35], name: 'Brussels' },
+			{ location: [51.21, 3.22], name: 'Brugge' }
+		] },
+	{ name: 'Luxemburg',
+		cities: [
+			{ location: [49.82, 6.13], name: 'Luxemburg City' }
+		] },
+	{ name: 'Netherlands',
+		cities: [
+			{ location: [52.37, 4.90], name: 'Amsterdam' }
+		] }
+	]
+}
 ];
 
