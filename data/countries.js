@@ -20,17 +20,26 @@ var colors = [
 		cities: [
 			{ location: [11.54, 104.89], name: 'Phnom Penh' }
 		] },
+	{ name: 'China',
+		cities: [
+			{ location: [22.40, 114.11], name: 'Hong Kong' },
+			{ location: [22.19, 113.54], name: 'Macau' }
+		] },
 	{ name: 'Mongolia',
 		cities: [
 			{ location: [47.89, 106.91], name: 'Ulaanbaatar' }
+		] },
+	{ name: 'Nepal',
+		cities: [
+			{ location: [27.72, 85.32], name: 'Katmandu' }
 		] },
 	{ name: 'North Korea',
 		cities: [
 			{ location: [38.49, 128.02], name: 'Mt. Kumgang' }
 		] },
-	{ name: 'Nepal',
+	{ name: 'Taiwan',
 		cities: [
-			{ location: [27.72, 85.32], name: 'Katmandu' }
+			{ location: [25.03, 121.57], name: 'Taipei' }
 		] },
 	{ name: 'Philippines',
 		cities: [
@@ -49,11 +58,16 @@ var colors = [
 			{ location: [-36.85, 174.76], name: 'Boracay' }
 		] },
 
-	// Europe - 14
+	// Europe - 17
 	{ name: 'Austria',
 		cities: [
 			{ location: [48.21, 16.37], name: 'Vienna' },
 			{ location: [47.81, 13.06], name: 'Salzburg' }
+		] },
+	{ name: 'Belgium',
+		cities: [
+			{ location: [50.85, 4.35], name: 'Brussels' },
+			{ location: [51.21, 3.22], name: 'Brugge' }
 		] },
 	{ name: 'Croatia',
 		cities: [
@@ -97,9 +111,17 @@ var colors = [
 		cities: [
 			{ location: [56.95, 24.11], name: 'Riga' }
 		] },
+	{ name: 'Luxemburg',
+		cities: [
+			{ location: [49.82, 6.13], name: 'Luxemburg City' }
+		] },
 	{ name: 'Monaco',
 		cities: [
 			{ location: [43.74, 7.42], name: 'Monaco' }
+		] },
+	{ name: 'Netherlands',
+		cities: [
+			{ location: [52.37, 4.90], name: 'Amsterdam' }
 		] },
 	{ name: 'Spain',
 		cities: [
@@ -190,7 +212,6 @@ var colors = [
 			{ location: [-15.84, -70.02], name: 'Puno' },
 			{ location: [-13.16, -72.55], name: 'Machu Picchu' },
 			{ location: [-14.74, -75.13], name: 'Nazca Lines' },
-			{ location: [-20.13, -67.49], name: 'Salar de Uyuni' }
 		] },
 
 	{ name: 'Dummy',
@@ -198,35 +219,25 @@ var colors = [
 		] }
 	]
 },
-{ color: 'red',
+{ color: 'FireBrick',
 	countries: [
-	// Asia
-	{ name: 'China',
+	// Europe
+	{ name: 'Russia',
 		cities: [
-			{ location: [22.40, 114.11], name: 'Hong Kong' }
+			{ location: [56.30, 43.94], name: 'Nizhny Novogorod' },
+			{ location: [47.24, 39.70], name: 'Rostov-on-Don' },
+			{ location: [55.83, 49.07], name: 'Kazan' },
+			{ location: [59.93, 30.34], name: 'Saint Petersburg' }
 		] },
+	// Asia
+	/*
 	{ name: 'Singapore',
 		cities: [
 			{ location: [1.35, 103.82], name: 'Singapore' }
 		] },
-	{ name: 'Taiwan',
+	*/
+	{ name: 'Dummy',
 		cities: [
-			{ location: [25.03, 121.57], name: 'Taipei' }
-		] },
-
-	// Europe
-	{ name: 'Belgium',
-		cities: [
-			{ location: [50.85, 4.35], name: 'Brussels' },
-			{ location: [51.21, 3.22], name: 'Brugge' }
-		] },
-	{ name: 'Luxemburg',
-		cities: [
-			{ location: [49.82, 6.13], name: 'Luxemburg City' }
-		] },
-	{ name: 'Netherlands',
-		cities: [
-			{ location: [52.37, 4.90], name: 'Amsterdam' }
 		] }
 	]
 }
