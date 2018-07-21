@@ -13,8 +13,12 @@ var colors = [
 	{ name: 'Japan',
 		cities: [
 			{ location: [35.69, 139.69], name: 'Tokyo' },
+			{ location: [35.44, 139.64], name: 'Yokohama' },
+			{ location: [34.69, 135.50], name: 'Osaka' },
 			{ location: [33.59, 130.40], name: 'Fukuoka' },
-			{ location: [43.06, 141.35], name: 'Sapporo' }
+			{ location: [43.06, 141.35], name: 'Sapporo' },
+			{ location: [43.19, 140.99], name: 'Otaru' },
+			{ location: [43.59, 142.47], name: 'Biei' }
 		] },
 	{ name: 'Cambodia',
 		cities: [
@@ -45,6 +49,11 @@ var colors = [
 		cities: [
 			{ location: [11.98, 121.92], name: 'Boracay' }
 		] },
+	{ name: 'Qatar',
+		cities: [
+			{ location: [25.29, 51.53], name: 'Doha' },
+			{ location: [24.90, 51.51], name: 'Sealine Beach' }
+		] },
 
 	// Oceania -2
 	{ name: 'Australia',
@@ -55,7 +64,7 @@ var colors = [
 		] },
 	{ name: 'New Zealand',
 		cities: [
-			{ location: [-36.85, 174.76], name: 'Boracay' }
+			{ location: [-36.85, 174.76], name: 'Auckland' }
 		] },
 
 	// Europe - 17
@@ -123,6 +132,14 @@ var colors = [
 		cities: [
 			{ location: [52.37, 4.90], name: 'Amsterdam' }
 		] },
+	{ name: 'Russia',
+		cities: [
+			{ location: [55.76, 37.62], name: 'Moscow' },
+			{ location: [56.30, 43.94], name: 'Nizhny Novogorod' },
+			{ location: [47.24, 39.70], name: 'Rostov-on-Don' },
+			{ location: [55.83, 49.07], name: 'Kazan' },
+			{ location: [59.93, 30.34], name: 'Saint Petersburg' }
+		] },
 	{ name: 'Spain',
 		cities: [
 			{ location: [41.39, 2.17], name: 'Barcelona' }
@@ -144,7 +161,7 @@ var colors = [
 	// Africa - 5 
 	{ name: 'Botswana',
 		cities: [
-			{ location: [-18.67, 24.50], name: 'Livingstone' }
+			{ location: [-18.67, 24.50], name: 'Chobe National Park' }
 		] },
 	{ name: 'Morocco',
 		cities: [
@@ -170,18 +187,21 @@ var colors = [
 		cities: [
 			{ location: [49.28, -123.12], name: 'Vancouver' },
 			{ location: [46.81, -71.21], name: 'Quebec' },
-			{ location: [43.65, -79.38], name: 'Toronto' }
+			{ location: [43.65, -79.38], name: 'Toronto' },
+			{ location: [45.42, -75.70], name: 'Ottawa' },
 		] },
 	{ name: 'USA',
 		cities: [
 			{ location: [37.77, -122.42], name: 'San Francisco' },
-			{ location: [36.60, -121.89], name: 'Monterey' },
+			{ location: [37.34, -121.89], name: 'San Jose' }, // + Monterey
 			{ location: [34.05, -118.24], name: 'Los Angeles' },
 			{ location: [32.72, -117.16], name: 'San Diego' },
 			{ location: [39.10, -120.03], name: 'Tahoe' },
 			{ location: [47.61, -122.33], name: 'Seattle' },
 			{ location: [36.17, -115.14], name: 'Las Vegas' },
-			{ location: [40.71, -74.01], name: 'New York' }
+			{ location: [40.71, -74.01], name: 'New York' },
+			{ location: [42.36, -71.06], name: 'Boston' },
+			{ location: [39.95, -75.17], name: 'Philadelphia' },
 		] },
 	
 	// South America - 5
@@ -221,14 +241,6 @@ var colors = [
 },
 { color: 'FireBrick',
 	countries: [
-	// Europe
-	{ name: 'Russia',
-		cities: [
-			{ location: [56.30, 43.94], name: 'Nizhny Novogorod' },
-			{ location: [47.24, 39.70], name: 'Rostov-on-Don' },
-			{ location: [55.83, 49.07], name: 'Kazan' },
-			{ location: [59.93, 30.34], name: 'Saint Petersburg' }
-		] },
 	// Asia
 	/*
 	{ name: 'Singapore',
