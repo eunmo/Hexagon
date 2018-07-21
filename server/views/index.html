@@ -310,7 +310,9 @@
 
 				cityFlag.attr('x', x)
 								.attr('y', (d, i) => { return 450 - 20 * i - 12; })
-								.attr('xlink:href', d => { return '/flag/' + d.code + '.png'; });
+								.attr('width', 23)
+								.attr('height', 15)
+								.attr("xlink:href", d => { return '/flag/' + d.code + '.png'; });
 				
 				cityFlag.exit().remove();
 			}
