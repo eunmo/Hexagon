@@ -14,11 +14,10 @@ app.set('view engine', 'html');
 
 app.use(express.static(path.join(__dirname, '../data')));
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.render('index');
 });
 
-var server = app.listen(3020, function () {
-	console.log('Express server listening on port ' + server.address ().port);
+var server = app.listen(3030, function() {
+  console.log('Express server listening on port ' + server.address().port);
 });
-
