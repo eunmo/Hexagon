@@ -1,363 +1,363 @@
 <html>
-	<head>
-		<style>
-		canvas {
-			display: none;
-		}
-		svg {
-			border-width: 1px;
-			border-style: solid;
-		}
-		.hexmap {
-			position: fixed;
-			top: 8px;
-			left: 8px;
-		}
-		.hexagons {
-			#opacity: 0.4;
-		}
-		.legend {
-			#opacity: 0.4;
-		}
-		</style>
-	</head>
-	<body>
-		<section id="vis"></section>
-
-		<!-- dependencies -->
-		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
-		<script src="https://d3js.org/topojson.v1.min.js"></script>
-		<script src="https://d3js.org/d3.geo.projection.v0.min.js"></script>
-		<script src="./countries.js"></script>
-		<!-- d3 code -->
-		<script>
-			var hexmap = function hexmap() {
-
-			//________________________________________________
-			// GET/SET defaults
-			//________________________________________________
-
-			// private variables
-			var svg = undefined;
-			var dispatch = d3.dispatch('customHover');
-
-			// getter setter defaults
-			var opts = {
-				width: 1920,
-				height: 1000,
-				margin: { top: 20, right: 10, bottom: 20, left: 10 },
-				radius: 7.5,
-				stroke: 1,
-				scale: 360,
-				rotate: [-10, 0, 0]
-			};
-
-			var hexbin = d3.hexbin().size([opts.width, opts.height]).radius(opts.radius);
-			var layer1, layer2;
-			var hexagons = [];
-			var selectedPoints = [];
-			var selectedCities = [];
-
-			//________________________________________________
-			// RENDER
-			//________________________________________________
-
-			function exports(_selection) {
-
-				var canvas = _selection.append('canvas').attr('width', opts.width).attr('height', opts.height).attr('id', 'mapCanvas');
-
-				var context = canvas.node().getContext('2d');
-				var points = [];
-				var cityPoints = [];
-				var cityHexagons = [];
-
-				var projection = d3.geo.kavrayskiy7().scale(opts.scale).rotate(opts.rotate).translate([opts.width / 2, opts.height / 2]).center([0, 0]);
-
-				context.fillStyle = 'red';
-				context.strokeStyle = 'none';
-
-				var path = d3.geo.path().projection(projection).context(context);
-
-				var dataUrl = './world-110m.json';
-
-				d3.json(dataUrl, function (error, world) {
-					if (error) throw error;
-					path(topojson.feature(world, world.objects.land));
-					context.fill();
-
-					// use the canvas as the image
-					var image = document.getElementById('mapCanvas');;
-
-					context.drawImage(image, 0, 0, opts.width, opts.height);
-					image = context.getImageData(0, 0, opts.width, opts.height);
-
-					// rescale the colors
-					for (var c, i = 0, n = opts.width * opts.height * 4, d = image.data; i < n; i += 4) {
-						points.push([i / 4 % opts.width, Math.floor(i / 4 / opts.width), d[i]]);
-					}
-
-					var coord, j, k, countries, city;
-
-					for (i = 0; i < colors.length; i++) {
-						countries = colors[i].countries;
-						cityPoints = [];
-						for (j = 0; j < countries.length; j++) {
-							for (k = 0; k < countries[j].cities.length; k++) {
-								city = countries[j].cities[k];
-								city.code = countries[j].code;
-								// projection needs input as [longitude (ie x), latitude (ie y)]
-								city.proj = projection([city.location[1], city.location[0]]);
-								city.hex = hexbin([city.proj])[0];
-							}
-						}
-					}
-
-					var cmpHex = function (a, b) {
-						return (a.x === b.x && a.y === b.y);
-					}
-
-					hexagons = hexbin(points);
-					hexagons.forEach(function (d) {
-						d.mean = d3.mean(d, function (p) {
-							return p[2];
-						});
-
-						d.fill = (d.mean >= 64) ? 'pink' : 'white';
-						d.cities = [];
-
-						var i, j, k, countries, city, hex;
-
-						for (i = 0; i < colors.length; i++) {
-							countries = colors[i].countries;
-							for (j = 0; j < countries.length; j++) {
-								for (k = 0; k < countries[j].cities.length; k++) {
-									city = countries[j].cities[k];
-									if (cmpHex(city.hex, d)) {
-										d.fill = colors[i].color;
-										d.cities.push(city);
-									}
-								}
-							}
-						}
-					});
-
-					var restoreFn = function() {
-						selectedPoints.forEach(d => {
-							d.fill = d.oldFill;
-							delete d.oldFill;
-						});
-						selectedPoints = [];
-						selectedCities = [];
-					}
-
-					var colorMap = {
-						'white': 'lightskyblue',
-						'pink': 'lemonchiffon',
-						'blue': 'red'
-					};
-
-					var onClickFn = function() {
-						var coords = d3.mouse(this);
-						var x = (coords[0] + 3.75) * 2;
-						var y = (coords[1] - 8.75) * 2;
-						var hex = hexbin([[x, y]])[0];
-
-						restoreFn();
-
-						if (y >= 900) {
-							render();
-							return;
-						}
-
-						hexagons.forEach(d => {
-							if (cmpHex(d, hex)) {
-								d.oldFill = d.fill;
-								d.fill = colorMap[d.fill];
-								selectedPoints.push(d);
-								selectedPoints.center = d;
-								d.cities.forEach(city => {
-									selectedCities.push(city);
-								});
-							} else {
-								var dx = Math.abs(hex.x - d.x);
-								var dy = Math.abs(hex.y - d.y);
-								if (dx + dy < opts.radius * 3) {
-									d.oldFill = d.fill;
-									d.fill = colorMap[d.fill];
-									selectedPoints.push(d);
-									d.cities.forEach(city => {
-										selectedCities.push(city);
-									});
-								}
-							}
-						});
-
-						render();
-					}
-
-					var svg = _selection.append('svg')
-															.attr('width', opts.width / 2)
-															.attr('height', opts.height / 2)
-															.attr('class', 'hexmap')
-															.on('click', onClickFn);
-
-					layer1 = svg.append('g');
-					layer2 = svg.append('g');
-
-					render();
-				});
-			} // exports
-
-			function render() {
-				var innerRadius = opts.radius - opts.stroke;
-
-				var validHexagons = hexagons.filter(h => { return h.fill !== 'white'; });
-
-				var hex = layer1.selectAll(".hexagons").data(validHexagons);
-
-				hex.enter()
-					 .append("path")
-					 .attr("class", "hexagons");
-
-				hex.attr('d', hexbin.hexagon(innerRadius / 2))
-					 .attr('transform', function (d) {
-						 var x = d.x / 2 - 3.75;
-						 var y = d.y / 2 + 8.75; 
-						 return 'translate(' + x + ',' + y + ')'; 
-						})
-					 .style('fill', function (d) { return (d.y >= 900) ? 'none' : d.fill; });
-
-				hex.exit().remove();
-
-				var legend = layer1.selectAll(".legend").data(selectedPoints);
-			
-				legend.enter()
-							.append("path")
-							.attr("class", "legend");
-
-				legend.attr('d', hexbin.hexagon(opts.radius * 2))
-							.attr('transform', function (d) {
-								var x = (d.x - selectedPoints.center.x) * 2 + 450;
-								var y = (d.y - selectedPoints.center.y) * 2 + 425;
-								return 'translate(' + x + ',' + y + ')'; 
-							})
-							.style('fill', function (d) { return d.fill; });
-
-				legend.exit().remove();
-
-				var leftCities = selectedCities.filter(city => { return city.proj[0] < selectedPoints.center.x });
-				var rightCities = selectedCities.filter(city => { return city.proj[0] >= selectedPoints.center.x });
-
-				renderCities(leftCities, 'left');
-				renderCities(rightCities, 'right');
-
-				var city = layer2.selectAll(".city").data(selectedCities);
-
-				city.enter()
-						.append("circle")
-						.attr("class", "city");
-
-				city.attr('r', 4)
-						.attr('cx', d => { return (d.proj[0] - selectedPoints.center.x) * 2 + 450; })
-						.attr('cy', d => { return (d.proj[1] - selectedPoints.center.y) * 2 + 425; })
-						.attr('stroke', 'blue')
-						.attr('stroke-width', 2)
-						.style('z-index', 1)
-						.style('fill', 'white');
-
-				city.exit().remove();
-			}
-
-			function renderCities(cities, side) {
-				cities.sort((a, b) => { return b.proj[1] - a.proj[1]; });
-				var cityName = layer1.selectAll(".city-name-" + side).data(cities);
-				var x = side === "left" ? 372 : 528;
-
-				cityName.enter().append("text").attr("class", "city-name-" + side);
-
-				cityName.attr('x', x)
-								.attr('y', (d, i) => { return 450 - 20 * i; })
-								.attr('text-anchor', side === "left" ? "end" : "start")
-								.text(d => { return d.name; });
-
-				cityName.exit().remove();
-
-				var cityLine = layer1.selectAll(".city-line-" + side).data(cities);
-
-				cityLine.enter().append("line").attr("class", "city-line-" + side);
-
-				x = side === "left" ? 405 : 495;
-
-				cityLine.attr('x1', x)
-								.attr('y1', (d, i) => { return 450 - 20 * i - 5; })
-								.attr('x2', d => { return (d.proj[0] - selectedPoints.center.x) * 2 + 450; })
-								.attr('y2', d => { return (d.proj[1] - selectedPoints.center.y) * 2 + 425; })
-								.attr('stroke', 'blue')
-								.attr('stroke-width', 1);
-
-				cityLine.exit().remove();
-
-				var cityFlag = layer2.selectAll(".city-flag-" + side).data(cities);
-
-				cityFlag.enter().append("image").attr("class", "city-flag-" + side);
-		
-				if (side === "left") {
-					x -= 28;
-				} else {
-					x += 5;
-				}
-
-				cityFlag.attr('x', x)
-								.attr('y', (d, i) => { return 450 - 20 * i - 12; })
-								.attr('width', 23)
-								.attr('height', 15)
-								.attr("xlink:href", d => { return '/flag/' + d.code + '.png'; });
-				
-				cityFlag.exit().remove();
-			}
-
-			function getImage(path, callback) {
-				var image = new Image();
-				image.onload = function () {
-					callback(image);
-				};
-				image.src = path;
-			}
-
-			//________________________________________________
-			// GET/SET 
-			//________________________________________________
-
-			function getSet(option, component) {
-				return function (_) {
-					if (!arguments.length) {
-						return this[option];
-					}
-
-					this[option] = _;
-
-					return component;
-				};
-			}
-
-			// api for chart, all items in `opts` object made into get-set
-			for (var key in opts) {
-				exports[key] = getSet(key, exports).bind(opts);
-			}
-
-			d3.rebind(exports, dispatch, 'on');
-			return exports;
-		};
-		</script>
-
-		<script>
-		// call chart 
-		let chart = hexmap();
-
-		// apply chart to DOM
-		d3.select('#vis')
-			.call(chart);
-		</script>
-	</body>
+  <head>
+    <style>
+    canvas {
+      display: none;
+    }
+    svg {
+      border-width: 1px;
+      border-style: solid;
+    }
+    .hexmap {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+    }
+    .hexagons {
+      #opacity: 0.4;
+    }
+    .legend {
+      #opacity: 0.4;
+    }
+    </style>
+  </head>
+  <body>
+    <section id="vis"></section>
+
+    <!-- dependencies -->
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3.geo.projection.v0.min.js"></script>
+    <script src="./countries.js"></script>
+    <!-- d3 code -->
+    <script>
+      var hexmap = function hexmap() {
+
+      //________________________________________________
+      // GET/SET defaults
+      //________________________________________________
+
+      // private variables
+      var svg = undefined;
+      var dispatch = d3.dispatch('customHover');
+
+      // getter setter defaults
+      var opts = {
+        width: 1920,
+        height: 1000,
+        margin: { top: 20, right: 10, bottom: 20, left: 10 },
+        radius: 7.5,
+        stroke: 1,
+        scale: 360,
+        rotate: [-10, 0, 0]
+      };
+
+      var hexbin = d3.hexbin().size([opts.width, opts.height]).radius(opts.radius);
+      var layer1, layer2;
+      var hexagons = [];
+      var selectedPoints = [];
+      var selectedCities = [];
+
+      //________________________________________________
+      // RENDER
+      //________________________________________________
+
+      function exports(_selection) {
+
+        var canvas = _selection.append('canvas').attr('width', opts.width).attr('height', opts.height).attr('id', 'mapCanvas');
+
+        var context = canvas.node().getContext('2d');
+        var points = [];
+        var cityPoints = [];
+        var cityHexagons = [];
+
+        var projection = d3.geo.kavrayskiy7().scale(opts.scale).rotate(opts.rotate).translate([opts.width / 2, opts.height / 2]).center([0, 0]);
+
+        context.fillStyle = 'red';
+        context.strokeStyle = 'none';
+
+        var path = d3.geo.path().projection(projection).context(context);
+
+        var dataUrl = './world-110m.json';
+
+        d3.json(dataUrl, function (error, world) {
+          if (error) throw error;
+          path(topojson.feature(world, world.objects.land));
+          context.fill();
+
+          // use the canvas as the image
+          var image = document.getElementById('mapCanvas');;
+
+          context.drawImage(image, 0, 0, opts.width, opts.height);
+          image = context.getImageData(0, 0, opts.width, opts.height);
+
+          // rescale the colors
+          for (var c, i = 0, n = opts.width * opts.height * 4, d = image.data; i < n; i += 4) {
+            points.push([i / 4 % opts.width, Math.floor(i / 4 / opts.width), d[i]]);
+          }
+
+          var coord, j, k, countries, city;
+
+          for (i = 0; i < colors.length; i++) {
+            countries = colors[i].countries;
+            cityPoints = [];
+            for (j = 0; j < countries.length; j++) {
+              for (k = 0; k < countries[j].cities.length; k++) {
+                city = countries[j].cities[k];
+                city.code = countries[j].code;
+                // projection needs input as [longitude (ie x), latitude (ie y)]
+                city.proj = projection([city.location[1], city.location[0]]);
+                city.hex = hexbin([city.proj])[0];
+              }
+            }
+          }
+
+          var cmpHex = function (a, b) {
+            return (a.x === b.x && a.y === b.y);
+          }
+
+          hexagons = hexbin(points);
+          hexagons.forEach(function (d) {
+            d.mean = d3.mean(d, function (p) {
+              return p[2];
+            });
+
+            d.fill = (d.mean >= 64) ? 'pink' : 'white';
+            d.cities = [];
+
+            var i, j, k, countries, city, hex;
+
+            for (i = 0; i < colors.length; i++) {
+              countries = colors[i].countries;
+              for (j = 0; j < countries.length; j++) {
+                for (k = 0; k < countries[j].cities.length; k++) {
+                  city = countries[j].cities[k];
+                  if (cmpHex(city.hex, d)) {
+                    d.fill = colors[i].color;
+                    d.cities.push(city);
+                  }
+                }
+              }
+            }
+          });
+
+          var restoreFn = function() {
+            selectedPoints.forEach(d => {
+              d.fill = d.oldFill;
+              delete d.oldFill;
+            });
+            selectedPoints = [];
+            selectedCities = [];
+          }
+
+          var colorMap = {
+            'white': 'lightskyblue',
+            'pink': 'lemonchiffon',
+            'blue': 'red'
+          };
+
+          var onClickFn = function() {
+            var coords = d3.mouse(this);
+            var x = (coords[0] + 3.75) * 2;
+            var y = (coords[1] - 8.75) * 2;
+            var hex = hexbin([[x, y]])[0];
+
+            restoreFn();
+
+            if (y >= 900) {
+              render();
+              return;
+            }
+
+            hexagons.forEach(d => {
+              if (cmpHex(d, hex)) {
+                d.oldFill = d.fill;
+                d.fill = colorMap[d.fill];
+                selectedPoints.push(d);
+                selectedPoints.center = d;
+                d.cities.forEach(city => {
+                  selectedCities.push(city);
+                });
+              } else {
+                var dx = Math.abs(hex.x - d.x);
+                var dy = Math.abs(hex.y - d.y);
+                if (dx + dy < opts.radius * 3) {
+                  d.oldFill = d.fill;
+                  d.fill = colorMap[d.fill];
+                  selectedPoints.push(d);
+                  d.cities.forEach(city => {
+                    selectedCities.push(city);
+                  });
+                }
+              }
+            });
+
+            render();
+          }
+
+          var svg = _selection.append('svg')
+                              .attr('width', opts.width / 2)
+                              .attr('height', opts.height / 2)
+                              .attr('class', 'hexmap')
+                              .on('click', onClickFn);
+
+          layer1 = svg.append('g');
+          layer2 = svg.append('g');
+
+          render();
+        });
+      } // exports
+
+      function render() {
+        var innerRadius = opts.radius - opts.stroke;
+
+        var validHexagons = hexagons.filter(h => { return h.fill !== 'white'; });
+
+        var hex = layer1.selectAll(".hexagons").data(validHexagons);
+
+        hex.enter()
+           .append("path")
+           .attr("class", "hexagons");
+
+        hex.attr('d', hexbin.hexagon(innerRadius / 2))
+           .attr('transform', function (d) {
+             var x = d.x / 2 - 3.75;
+             var y = d.y / 2 + 8.75;
+             return 'translate(' + x + ',' + y + ')';
+            })
+           .style('fill', function (d) { return (d.y >= 900) ? 'none' : d.fill; });
+
+        hex.exit().remove();
+
+        var legend = layer1.selectAll(".legend").data(selectedPoints);
+
+        legend.enter()
+              .append("path")
+              .attr("class", "legend");
+
+        legend.attr('d', hexbin.hexagon(opts.radius * 2))
+              .attr('transform', function (d) {
+                var x = (d.x - selectedPoints.center.x) * 2 + 450;
+                var y = (d.y - selectedPoints.center.y) * 2 + 425;
+                return 'translate(' + x + ',' + y + ')';
+              })
+              .style('fill', function (d) { return d.fill; });
+
+        legend.exit().remove();
+
+        var leftCities = selectedCities.filter(city => { return city.proj[0] < selectedPoints.center.x });
+        var rightCities = selectedCities.filter(city => { return city.proj[0] >= selectedPoints.center.x });
+
+        renderCities(leftCities, 'left');
+        renderCities(rightCities, 'right');
+
+        var city = layer2.selectAll(".city").data(selectedCities);
+
+        city.enter()
+            .append("circle")
+            .attr("class", "city");
+
+        city.attr('r', 4)
+            .attr('cx', d => { return (d.proj[0] - selectedPoints.center.x) * 2 + 450; })
+            .attr('cy', d => { return (d.proj[1] - selectedPoints.center.y) * 2 + 425; })
+            .attr('stroke', 'blue')
+            .attr('stroke-width', 2)
+            .style('z-index', 1)
+            .style('fill', 'white');
+
+        city.exit().remove();
+      }
+
+      function renderCities(cities, side) {
+        cities.sort((a, b) => { return b.proj[1] - a.proj[1]; });
+        var cityName = layer1.selectAll(".city-name-" + side).data(cities);
+        var x = side === "left" ? 372 : 528;
+
+        cityName.enter().append("text").attr("class", "city-name-" + side);
+
+        cityName.attr('x', x)
+                .attr('y', (d, i) => { return 450 - 20 * i; })
+                .attr('text-anchor', side === "left" ? "end" : "start")
+                .text(d => { return d.name; });
+
+        cityName.exit().remove();
+
+        var cityLine = layer1.selectAll(".city-line-" + side).data(cities);
+
+        cityLine.enter().append("line").attr("class", "city-line-" + side);
+
+        x = side === "left" ? 405 : 495;
+
+        cityLine.attr('x1', x)
+                .attr('y1', (d, i) => { return 450 - 20 * i - 5; })
+                .attr('x2', d => { return (d.proj[0] - selectedPoints.center.x) * 2 + 450; })
+                .attr('y2', d => { return (d.proj[1] - selectedPoints.center.y) * 2 + 425; })
+                .attr('stroke', 'blue')
+                .attr('stroke-width', 1);
+
+        cityLine.exit().remove();
+
+        var cityFlag = layer2.selectAll(".city-flag-" + side).data(cities);
+
+        cityFlag.enter().append("image").attr("class", "city-flag-" + side);
+
+        if (side === "left") {
+          x -= 28;
+        } else {
+          x += 5;
+        }
+
+        cityFlag.attr('x', x)
+                .attr('y', (d, i) => { return 450 - 20 * i - 12; })
+                .attr('width', 23)
+                .attr('height', 15)
+                .attr("xlink:href", d => { return '/flag/' + d.code + '.png'; });
+
+        cityFlag.exit().remove();
+      }
+
+      function getImage(path, callback) {
+        var image = new Image();
+        image.onload = function () {
+          callback(image);
+        };
+        image.src = path;
+      }
+
+      //________________________________________________
+      // GET/SET
+      //________________________________________________
+
+      function getSet(option, component) {
+        return function (_) {
+          if (!arguments.length) {
+            return this[option];
+          }
+
+          this[option] = _;
+
+          return component;
+        };
+      }
+
+      // api for chart, all items in `opts` object made into get-set
+      for (var key in opts) {
+        exports[key] = getSet(key, exports).bind(opts);
+      }
+
+      d3.rebind(exports, dispatch, 'on');
+      return exports;
+    };
+    </script>
+
+    <script>
+    // call chart
+    let chart = hexmap();
+
+    // apply chart to DOM
+    d3.select('#vis')
+      .call(chart);
+    </script>
+  </body>
 </html>
