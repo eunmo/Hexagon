@@ -6,7 +6,7 @@ var colors = [
       // Asia - 7
       {
         name: 'Korea',
-        code: 'kor',
+        code: 'KOR',
         cities: [
           { location: [37.57, 127.98], name: 'Seoul' },
           { location: [35.43, 127.41], name: 'Jeonju' },
@@ -16,7 +16,7 @@ var colors = [
       },
       {
         name: 'Japan',
-        code: 'jap',
+        code: 'JPN',
         cities: [
           { location: [35.69, 139.69], name: 'Tokyo' },
           { location: [35.44, 139.64], name: 'Yokohama' },
@@ -30,12 +30,12 @@ var colors = [
       },
       {
         name: 'Cambodia',
-        code: 'khm',
+        code: 'CAM',
         cities: [{ location: [11.54, 104.89], name: 'Phnom Penh' }]
       },
       {
         name: 'China',
-        code: 'chn',
+        code: 'CHN',
         cities: [
           { location: [22.4, 114.11], name: 'Hong Kong' },
           { location: [22.19, 113.54], name: 'Macau' }
@@ -43,32 +43,32 @@ var colors = [
       },
       {
         name: 'Mongolia',
-        code: 'mng',
+        code: 'MNG',
         cities: [{ location: [47.89, 106.91], name: 'Ulaanbaatar' }]
       },
       {
         name: 'Nepal',
-        code: 'npl',
+        code: 'NEP',
         cities: [{ location: [27.72, 85.32], name: 'Katmandu' }]
       },
       {
         name: 'North Korea',
-        code: 'prk',
+        code: 'PRK',
         cities: [{ location: [38.49, 128.02], name: 'Mt. Kumgang' }]
       },
       {
         name: 'Taiwan',
-        code: 'twn',
+        code: 'TPE',
         cities: [{ location: [25.03, 121.57], name: 'Taipei' }]
       },
       {
         name: 'Philippines',
-        code: 'phl',
+        code: 'PHI',
         cities: [{ location: [11.98, 121.92], name: 'Boracay' }]
       },
       {
         name: 'Qatar',
-        code: 'qat',
+        code: 'QAT',
         cities: [
           { location: [25.29, 51.53], name: 'Doha' },
           { location: [24.9, 51.51], name: 'Sealine Beach' }
@@ -76,14 +76,14 @@ var colors = [
       },
       {
         name: 'Vietnam',
-        code: 'vnm',
+        code: 'VIE',
         cities: [{ location: [21.03, 105.83], name: 'Hanoi' }]
       },
 
       // Oceania -2
       {
         name: 'Australia',
-        code: 'aus',
+        code: 'AUS',
         cities: [
           { location: [-33.87, 151.21], name: 'Sydney' },
           { location: [-37.81, 144.96], name: 'Melbourne' },
@@ -92,14 +92,14 @@ var colors = [
       },
       {
         name: 'New Zealand',
-        code: 'nzl',
+        code: 'NZL',
         cities: [{ location: [-36.85, 174.76], name: 'Auckland' }]
       },
 
       // Europe - 17
       {
         name: 'Austria',
-        code: 'aut',
+        code: 'AUT',
         cities: [
           { location: [48.21, 16.37], name: 'Vienna' },
           { location: [47.81, 13.06], name: 'Salzburg' }
@@ -107,7 +107,7 @@ var colors = [
       },
       {
         name: 'Belgium',
-        code: 'bel',
+        code: 'BEL',
         cities: [
           { location: [50.85, 4.35], name: 'Brussels' },
           { location: [51.21, 3.22], name: 'Brugge' }
@@ -115,7 +115,7 @@ var colors = [
       },
       {
         name: 'Croatia',
-        code: 'hrv',
+        code: 'CRO',
         cities: [
           { location: [45.82, 15.97], name: 'Zagreb' },
           { location: [44.53, 15.37], name: 'Plitvice' },
@@ -125,30 +125,27 @@ var colors = [
       },
       {
         name: 'Czech',
-        code: 'cze',
+        code: 'CZE',
         cities: [{ location: [50.08, 14.44], name: 'Prague' }]
       },
       {
-        name: 'Germany',
-        code: 'deu',
-        cities: [
-          { location: [48.14, 11.58], name: 'Munich' },
-          { location: [47.57, 10.7], name: 'Fussen' }
-        ]
+        name: 'England',
+        code: 'ENG',
+        cities: [{ location: [51.51, 0.13], name: 'London' }]
       },
       {
         name: 'Estonia',
-        code: 'est',
+        code: 'EST',
         cities: [{ location: [59.43, 24.75], name: 'Tallinn' }]
       },
       {
         name: 'Finland',
-        code: 'fin',
+        code: 'FIN',
         cities: [{ location: [60.17, 24.94], name: 'Helsinki' }]
       },
       {
         name: 'France',
-        code: 'fra',
+        code: 'FRA',
         cities: [
           { location: [48.86, 2.35], name: 'Paris' },
           { location: [47.32, 5.04], name: 'Dijon' },
@@ -158,8 +155,16 @@ var colors = [
         ]
       },
       {
+        name: 'Germany',
+        code: 'GER',
+        cities: [
+          { location: [48.14, 11.58], name: 'Munich' },
+          { location: [47.57, 10.7], name: 'Fussen' }
+        ]
+      },
+      {
         name: 'Italy',
-        code: 'ita',
+        code: 'ITA',
         cities: [
           { location: [41.9, 12.5], name: 'Rome' },
           { location: [43.77, 11.26], name: 'Florence' },
@@ -168,27 +173,27 @@ var colors = [
       },
       {
         name: 'Latvia',
-        code: 'lva',
+        code: 'LVA',
         cities: [{ location: [56.95, 24.11], name: 'Riga' }]
       },
       {
         name: 'Luxemburg',
-        code: 'lux',
+        code: 'LUX',
         cities: [{ location: [49.82, 6.13], name: 'Luxemburg City' }]
       },
       {
         name: 'Monaco',
-        code: 'mco',
+        code: 'MCO',
         cities: [{ location: [43.74, 7.42], name: 'Monaco' }]
       },
       {
         name: 'Netherlands',
-        code: 'nld',
+        code: 'NED',
         cities: [{ location: [52.37, 4.9], name: 'Amsterdam' }]
       },
       {
         name: 'Russia',
-        code: 'rus',
+        code: 'RUS',
         cities: [
           { location: [55.76, 37.62], name: 'Moscow' },
           { location: [56.3, 43.94], name: 'Nizhny Novogorod' },
@@ -199,37 +204,32 @@ var colors = [
       },
       {
         name: 'Spain',
-        code: 'esp',
+        code: 'ESP',
         cities: [{ location: [41.39, 2.17], name: 'Barcelona' }]
       },
       {
         name: 'Sweden',
-        code: 'swe',
+        code: 'SWE',
         cities: [{ location: [59.33, 18.07], name: 'Stockholm' }]
       },
       {
         name: 'Switzerland',
-        code: 'che',
+        code: 'SUI',
         cities: [
           { location: [46.69, 7.86], name: 'Interlaken' },
           { location: [46.2, 6.14], name: 'Geneva' }
         ]
       },
-      {
-        name: 'UK',
-        code: 'gbr',
-        cities: [{ location: [51.51, 0.13], name: 'London' }]
-      },
 
       // Africa - 5
       {
         name: 'Botswana',
-        code: 'bwa',
+        code: 'BOT',
         cities: [{ location: [-18.67, 24.5], name: 'Chobe National Park' }]
       },
       {
         name: 'Morocco',
-        code: 'mar',
+        code: 'MAR',
         cities: [
           { location: [33.97, -6.85], name: 'Rabat' },
           { location: [33.57, -7.59], name: 'Casablanca' }
@@ -237,7 +237,7 @@ var colors = [
       },
       {
         name: 'South Africa',
-        code: 'zaf',
+        code: 'RSA',
         cities: [
           { location: [-33.92, 18.42], name: 'Cape Town' },
           { location: [-34.36, 18.47], name: 'Cape of Good Hope' }
@@ -245,19 +245,19 @@ var colors = [
       },
       {
         name: 'Zambia',
-        code: 'zmb',
+        code: 'ZAM',
         cities: [{ location: [-17.85, 25.83], name: 'Livingstone' }]
       },
       {
         name: 'Zimbabwe',
-        code: 'zwe',
+        code: 'ZIM',
         cities: [{ location: [-17.92, 25.86], name: 'Victoria Falls' }]
       },
 
       // North America - 2
       {
         name: 'Canada',
-        code: 'can',
+        code: 'CAN',
         cities: [
           { location: [49.28, -123.12], name: 'Vancouver' },
           { location: [46.81, -71.21], name: 'Québec' },
@@ -268,7 +268,7 @@ var colors = [
       },
       {
         name: 'USA',
-        code: 'usa',
+        code: 'USA',
         cities: [
           { location: [37.77, -122.42], name: 'San Francisco' },
           { location: [37.34, -121.89], name: 'San Jose' }, // + Monterey
@@ -286,7 +286,7 @@ var colors = [
       // South America - 5
       {
         name: 'Argentina',
-        code: 'arg',
+        code: 'ARG',
         cities: [
           { location: [-34.6, -58.38], name: 'Buenos Aires' },
           { location: [-54.8, -68.3], name: 'Ushuaia' }
@@ -294,7 +294,7 @@ var colors = [
       },
       {
         name: 'Bolivia',
-        code: 'bol',
+        code: 'BOL',
         cities: [
           { location: [-16.49, -68.12], name: 'La Paz' },
           { location: [-16.17, -69.09], name: 'Copacabana' },
@@ -303,7 +303,7 @@ var colors = [
       },
       {
         name: 'Brazil',
-        code: 'bra',
+        code: 'BRA',
         cities: [
           { location: [-22.91, -43.17], name: 'Rio de Janeiro' },
           { location: [-25.7, -54.44], name: 'Iguazu Falls' }
@@ -311,7 +311,7 @@ var colors = [
       },
       {
         name: 'Chile',
-        code: 'chl',
+        code: 'CHI',
         cities: [
           { location: [-33.45, -70.67], name: 'Santiago' },
           { location: [-23.86, -69.13], name: 'Atacama' }
@@ -319,7 +319,7 @@ var colors = [
       },
       {
         name: 'Peru',
-        code: 'per',
+        code: 'PER',
         cities: [
           { location: [-12.05, -77.04], name: 'Lima' },
           { location: [-15.84, -70.02], name: 'Puno' },
