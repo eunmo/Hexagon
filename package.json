@@ -9,7 +9,7 @@
   "author": "Eunmo Yang",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.2",
+    "ejs": "^3.1.5",
     "express": "^4.17.1"
   }
 }
