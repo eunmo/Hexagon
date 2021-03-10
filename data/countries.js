@@ -3,12 +3,13 @@ var colors = [
   {
     color: 'blue',
     countries: [
-      // Asia - 7
+      // Asia - 11
       {
         name: 'Korea',
         code: 'KOR',
         cities: [
-          { location: [37.57, 127.98], name: 'Seoul' },
+          { location: [37.57, 126.98], name: 'Seoul' },
+          { location: [37.49, 127.98], name: 'Hoengseong' },
           { location: [35.43, 127.41], name: 'Jeonju' },
           { location: [35.18, 129.08], name: 'Busan' },
           { location: [33.3, 126.32], name: 'Jeju' }
@@ -27,7 +28,8 @@ var colors = [
           { location: [43.19, 140.99], name: 'Otaru' },
           { location: [43.59, 142.47], name: 'Biei' },
           { location: [35.61, 140.11], name: 'Chiba' },
-          { location: [36.49, 139.43], name: 'Kinugawa' }
+          { location: [36.49, 139.43], name: 'Kinugawa' },
+          { location: [36.73, 137.85], name: 'Hakuba' }
         ]
       },
       {
@@ -98,7 +100,7 @@ var colors = [
         cities: [{ location: [-36.85, 174.76], name: 'Auckland' }]
       },
 
-      // Europe - 17
+      // Europe - 18
       {
         name: 'Austria',
         code: 'AUT',
