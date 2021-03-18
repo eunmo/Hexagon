@@ -29,7 +29,8 @@ var colors = [
           { location: [43.59, 142.47], name: 'Biei' },
           { location: [35.61, 140.11], name: 'Chiba' },
           { location: [36.49, 139.43], name: 'Kinugawa' },
-          { location: [36.73, 137.85], name: 'Hakuba' }
+          { location: [36.73, 137.85], name: 'Hakuba' },
+          { location: [30.34, 130.51], name: 'Yakushima' }
         ]
       },
       {
