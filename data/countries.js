@@ -48,7 +48,7 @@ var colors = [
       },
       {
         name: 'Mongolia',
-        code: 'MNG',
+        code: 'MGL',
         cities: [{ location: [47.89, 106.91], name: 'Ulaanbaatar' }]
       },
       {
