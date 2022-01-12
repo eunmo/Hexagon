@@ -172,8 +172,6 @@ var colors = [
         name: 'Germany',
         code: 'GER',
         cities: [
-          { location: [48.14, 11.58], name: 'Munich' },
-          { location: [47.57, 10.7], name: 'Fussen' },
           { location: [48.14, 11.58], name: 'Munich' }, // + Bamberg, Nuremberg
           { location: [47.57, 10.7], name: 'Fussen' },
           { location: [53.55, 9.99], name: 'Hamburg' },
