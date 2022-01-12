@@ -134,6 +134,15 @@ var colors = [
         cities: [{ location: [50.08, 14.44], name: 'Prague' }]
       },
       {
+        name: 'Denmark',
+        code: 'DEN',
+        cities: [
+          { location: [55.68, 12.57], name: 'Copenhagen' },
+          { location: [55.40, 10.40], name: 'Odense' },
+          { location: [55.33, 8.77], name: 'Ribe' },
+        ]
+      },
+      {
         name: 'England',
         code: 'ENG',
         cities: [{ location: [51.51, 0.13], name: 'London' }]
@@ -164,7 +173,13 @@ var colors = [
         code: 'GER',
         cities: [
           { location: [48.14, 11.58], name: 'Munich' },
-          { location: [47.57, 10.7], name: 'Fussen' }
+          { location: [47.57, 10.7], name: 'Fussen' },
+          { location: [48.14, 11.58], name: 'Munich' }, // + Bamberg, Nuremberg
+          { location: [47.57, 10.7], name: 'Fussen' },
+          { location: [53.55, 9.99], name: 'Hamburg' },
+          { location: [52.52, 13.41], name: 'Berlin' }, // + Teltow, Potsdam
+          { location: [50.11, 8.68], name: 'Frankfurt' }, // + Baden-Baden, Heidelburg
+          { location: [50.94, 6.96], name: 'Cologne' },
         ]
       },
       {
