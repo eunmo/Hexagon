@@ -82,7 +82,7 @@ var colors = [
       {
         name: 'Vietnam',
         code: 'VIE',
-        cities: [{ location: [21.03, 105.83], name: 'Hanoi' }]
+        cities: [{ location: [21.03, 105.83], name: 'Hanoi' }] // + Halong Bay
       },
 
       // Oceania -2
@@ -282,6 +282,22 @@ var colors = [
           { location: [43.65, -79.38], name: 'Toronto' },
           { location: [45.42, -75.7], name: 'Ottawa' },
           { location: [45.5, -73.57], name: 'Montréal' }
+        ]
+      },
+      {
+        name: 'Cuba',
+        code: 'CUB',
+        cities: [
+          { location: [23.11, -82.37], name: 'La Havana' }, // + Viñales Valley
+          { location: [23.18, -82.19], name: 'Playas del este' }
+        ]
+      },
+      {
+        name: 'Mexico',
+        code: 'MEX',
+        cities: [
+          { location: [19.43, -99.13], name: 'Mexico City' }, // + San Juan Teotihuacán
+          { location: [17.07, -96.73], name: 'Oaxaca' }
         ]
       },
       {
